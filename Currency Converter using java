@@ -1,0 +1,87 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+
+public class CurrencyConverter extends JFrame implements ActionListener {
+
+    private final double USDtoEUR = 0.85; // Conversion rate from USD to EUR
+    private final double USDtoGBP = 0.72; // Conversion rate from USD to GBP
+    private final double EURtoUSD = 1.18; // Conversion rate from EUR to USD
+    private final double GBPtoUSD = 1.39; // Conversion rate from GBP to USD
+
+    private final JLabel lblTitle;
+    private final JLabel lblFrom;
+    private final JLabel lblTo;
+    private final JLabel lblAmount;
+    private final JTextField txtAmount;
+    private final JComboBox<String> cbFrom;
+    private final JComboBox<String> cbTo;
+    private final JButton btnConvert;
+
+    public CurrencyConverter() {
+        super("Currency Converter");
+
+        // Create components
+        lblTitle = new JLabel("Currency Converter");
+        lblFrom = new JLabel("From:");
+        lblTo = new JLabel("To:");
+        lblAmount = new JLabel("Amount:");
+        txtAmount = new JTextField(10);
+        cbFrom = new JComboBox<>(new String[]{"USD", "EUR", "GBP"});
+        cbTo = new JComboBox<>(new String[]{"USD", "EUR", "GBP"});
+        btnConvert = new JButton("Convert");
+
+        // Set layout
+        setLayout(new GridLayout(5, 2));
+
+        // Add components to frame
+        add(lblTitle);
+        add(new JLabel()); // Empty label for spacing
+        add(lblFrom);
+        add(cbFrom);
+        add(lblTo);
+        add(cbTo);
+        add(lblAmount);
+        add(txtAmount);
+        add(new JLabel()); // Empty label for spacing
+        add(btnConvert);
+
+        // Add action listener to convert button
+        btnConvert.addActionListener(this);
+
+        // Set frame properties
+        setSize(400, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center the frame on the screen
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Get amount to convert
+        double amount = Double.parseDouble(txtAmount.getText());
+
+        // Convert currency based on selected options
+        double result;
+        if (cbFrom.getSelectedItem().equals("USD") && cbTo.getSelectedItem().equals("EUR")) {
+            result = amount * USDtoEUR;
+        } else if (cbFrom.getSelectedItem().equals("USD") && cbTo.getSelectedItem().equals("GBP")) {
+            result = amount * USDtoGBP;
+        } else if (cbFrom.getSelectedItem().equals("EUR") && cbTo.getSelectedItem().equals("USD")) {
+            result = amount * EURtoUSD;
+        } else {
+            result = amount * GBPtoUSD;
+        }
+
+        // Format and display result
+        DecimalFormat df = new DecimalFormat("#.##");
+        JOptionPane.showMessageDialog(this, df.format(amount) + " " + cbFrom.getSelectedItem() +
+                " is equal to " + df.format(result) + " " + cbTo.getSelectedItem());
+    }
+
+    public static void main(String[] args) {
+        new CurrencyConverter();
+    }
+}
